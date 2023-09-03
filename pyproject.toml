@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "chatgpt-obsidian-import"
+version = "0.1.0"
+description = ""
+authors = ["Richard Bellamy <rbellamy@nuvalence.io>"]
+readme = "README.md"
+packages = [{include = "chatgpt_obsidian_import"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+networkx = "^3.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
