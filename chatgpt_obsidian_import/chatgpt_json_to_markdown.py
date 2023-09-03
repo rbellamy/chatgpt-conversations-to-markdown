@@ -1,14 +1,10 @@
-from pathlib import Path
-
-import argparse
 import json
-import os
 import re
-
-import networkx as nx
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Any, Optional
 
+import networkx as nx
 from networkx import DiGraph
 
 HORIZONTAL_LINE = "\n---\n\n"
@@ -139,52 +135,3 @@ def prepend_emoji_to_role(role):
 def save_to_obsidian(title: str, markdown_data: str, obsidian_vault_path: Path) -> None:
     with open(f"{obsidian_vault_path}/{title}.md", "w") as f:
         f.write(markdown_data)
-
-
-def main(file_path: Path, vault_path: Path):
-    # Your anonymization and conversation-to-Markdown logic here
-    print(f"Processing {file_path} and saving to {vault_path}")
-    os.makedirs(vault_path, exist_ok=True)
-    with open(file_path, "r") as f:
-        chat_data = json.load(f)
-        for conversation in chat_data:
-            conversation_graph = conversation_to_graph(conversation)
-            title = sanitize_title(
-                conversation.get(
-                    "title", f"Untitled Conversation-{conversation.get('id')}"
-                )
-            )
-            # Get the date of the conversation
-            create_time = datetime.fromtimestamp(
-                conversation.get("create_time", datetime.utcnow())
-            )
-            markdown_data = graph_to_markdown(
-                title=title, create_time=create_time, graph=conversation_graph
-            )
-            if markdown_data:
-                save_to_obsidian(title, markdown_data, vault_path)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Convert ChatGPT conversations to Obsidian-friendly Markdown."
-    )
-
-    parser.add_argument(
-        "-i",
-        "--input-file",
-        required=True,
-        type=Path,
-        help="Path to the input JSON file containing ChatGPT conversations.",
-    )
-    parser.add_argument(
-        "-o",
-        "--output-directory",
-        required=True,
-        type=Path,
-        help="Path to the output Markdown file.",
-    )
-
-    args = parser.parse_args()
-
-    main(args.input_file, args.output_directory)
