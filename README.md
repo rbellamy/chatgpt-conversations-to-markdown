@@ -1,12 +1,13 @@
-# chatgpt-obsidian-import
+# chatgpt-conversations-to-markdown
 
 Started as a thought for getting my conversations into Obisidian.
 
-This is a simple script to import your [ChatGPT](https://chat.openai.com/) conversations into [Obsidian](https://obsidian.md/).
+This is a simple script to transform your [ChatGPT](https://chat.openai.com/) conversations into [Markdown](https://www.markdownguide.org/).
 
 ## Usage
 
 1. Export your ChatGPT conversations as a JSON file.
+   ![](chatgpt-data-export.png)
 3. Create a virtual environment and install the dependencies:
     ```bash
     poetry env use 3.11
