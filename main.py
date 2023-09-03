@@ -5,7 +5,7 @@ from pathlib import Path
 
 import argparse
 
-from chatgpt_obsidian_import import (
+from chatgpt_conversations import (
     conversation_to_graph,
     sanitize_title,
     graph_to_markdown,

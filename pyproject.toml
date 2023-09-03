@@ -5,7 +5,7 @@ description = ""
 authors = ["Richard Bellamy <rbellamy@nuvalence.io>"]
 readme = "README.md"
 include = ["./example", "main.py"]
-packages = [{include = "chatgpt_obsidian_import"}]
+packages = [{include = "chatgpt_conversations"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
