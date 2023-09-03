@@ -13,4 +13,4 @@ This is a simple script to import your [ChatGPT](https://chat.openai.com/) conve
 The `example` directory contains an example JSON file and the corresponding Obsidian Markdown file created from it.
 
 - [conversations-one.json](./example/conversations-one.json)
-- [Syncing ChatGPT with Obsidian](./example/Syncing ChatGPT with Obsidian.md)
+- [Syncing ChatGPT with Obsidian](./example/Syncing%20ChatGPT%20with%20Obsidian.md)
