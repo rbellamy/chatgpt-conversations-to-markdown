@@ -1,3 +1,6 @@
+from pathlib import Path
+
+import argparse
 import json
 import os
 import re
@@ -7,6 +10,8 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 from networkx import DiGraph
+
+HORIZONTAL_LINE = "\n---\n\n"
 
 
 def conversation_to_graph(conversation: Dict[str, Any]) -> Optional[DiGraph]:
@@ -69,10 +74,17 @@ def collapsible_metadata_markdown(graph, node):
     return None
 
 
-def graph_to_markdown(title: str, create_time: datetime, graph: nx.DiGraph) -> str:
+def graph_to_markdown(
+    title: str, create_time: datetime, graph: nx.DiGraph
+) -> Optional[str]:
     # Generate Markdown from the graph
-    markdown_output = f"# {title}\n\n_({create_time:%Y-%m-%d %H:%M:%S})_\n"
-    # Get the root node (node with in-degree of zero)
+    # I use Markdown links for Dates so the calendar is matched - change to taste
+    markdown_output = (
+        f"# {title}\n\n_([[{create_time:%Y-%m-%d}]] {create_time:%H:%M:%S})_\n"
+    )
+    # Get the root node (node with in-degree of zero) - note that this returns an `int` or a `dict` (wtf?)
+    # depending on whether the degree has child nodes or not
+    # noinspection PyCallingNonCallable
     in_degrees = dict(graph.in_degree())
     if isinstance(in_degrees, dict):
         root_nodes = [n for n, d in in_degrees.items() if d == 0]
@@ -87,37 +99,51 @@ def graph_to_markdown(title: str, create_time: datetime, graph: nx.DiGraph) -> s
                 continue
 
             role = graph.nodes[node]["role"]
-            match role:
-                case "system":
-                    role = "⚙️ system"
-                case "assistant":
-                    role = "🤖 assistant"
-                case "tool":
-                    role = "🛠️ tool"
-                case "user":
-                    role = "👤 user"
-                case _:
-                    role = "unknown"
+            role_with_emoji = prepend_emoji_to_role(role)
             text = graph.nodes[node]["text"]
-            metadata_markdown = collapsible_metadata_markdown(graph, node)
-            if metadata_markdown and text:
-                markdown_output += "\n---\n"
-                markdown_output += f"{metadata_markdown}\n_**{role}**_:\n{text}\n"
-            elif text:
-                markdown_output += "\n---\n"
-                markdown_output += f"_**{role}**_:\n{text}\n"
+            if role == "system":
+                metadata_markdown = collapsible_metadata_markdown(graph, node)
+                if metadata_markdown and text:
+                    markdown_output += HORIZONTAL_LINE
+                    markdown_output += (
+                        f"{metadata_markdown}\n_**{role_with_emoji}**_:\n{text}\n"
+                    )
+                    continue
+                elif metadata_markdown:
+                    markdown_output += HORIZONTAL_LINE
+                    markdown_output += f"{metadata_markdown}\n_**{role_with_emoji}**_\n"
+                    continue
+
+            if text:
+                markdown_output += HORIZONTAL_LINE
+                markdown_output += f"_**{role_with_emoji}**_:\n{text}\n"
 
     return f"{markdown_output}\n"
 
 
-def save_to_obsidian(title: str, markdown_data: str, obsidian_vault_path: str) -> None:
+def prepend_emoji_to_role(role):
+    match role:
+        case "system":
+            role = "⚙️ system"
+        case "assistant":
+            role = "🤖 assistant"
+        case "tool":
+            role = "🛠️ tool"
+        case "user":
+            role = "👤 user"
+        case _:
+            role = "unknown"
+    return role
+
+
+def save_to_obsidian(title: str, markdown_data: str, obsidian_vault_path: Path) -> None:
     with open(f"{obsidian_vault_path}/{title}.md", "w") as f:
         f.write(markdown_data)
 
 
-if __name__ == "__main__":
-    file_path = "../.data/conversations.json"
-    vault_path = "../.data/ChatGPT Conversations"
+def main(file_path: Path, vault_path: Path):
+    # Your anonymization and conversation-to-Markdown logic here
+    print(f"Processing {file_path} and saving to {vault_path}")
     os.makedirs(vault_path, exist_ok=True)
     with open(file_path, "r") as f:
         chat_data = json.load(f)
@@ -135,4 +161,30 @@ if __name__ == "__main__":
             markdown_data = graph_to_markdown(
                 title=title, create_time=create_time, graph=conversation_graph
             )
-            save_to_obsidian(title, markdown_data, vault_path)
+            if markdown_data:
+                save_to_obsidian(title, markdown_data, vault_path)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Convert ChatGPT conversations to Obsidian-friendly Markdown."
+    )
+
+    parser.add_argument(
+        "-i",
+        "--input-file",
+        required=True,
+        type=Path,
+        help="Path to the input JSON file containing ChatGPT conversations.",
+    )
+    parser.add_argument(
+        "-o",
+        "--output-directory",
+        required=True,
+        type=Path,
+        help="Path to the output Markdown file.",
+    )
+
+    args = parser.parse_args()
+
+    main(args.input_file, args.output_directory)

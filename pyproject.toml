@@ -9,6 +9,7 @@ packages = [{include = "chatgpt_obsidian_import"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 networkx = "^3.1"
+argparse = "^1.4.0"
 
 
 [build-system]
