@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Richard Bellamy <rbellamy@nuvalence.io>"]
 readme = "README.md"
+include = ["./example", "main.py"]
 packages = [{include = "chatgpt_obsidian_import"}]
 
 [tool.poetry.dependencies]
