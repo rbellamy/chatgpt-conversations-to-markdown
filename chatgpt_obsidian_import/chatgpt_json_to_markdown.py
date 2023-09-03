@@ -102,17 +102,15 @@ def graph_to_markdown(
                 if metadata_markdown and text:
                     markdown_output += HORIZONTAL_LINE
                     markdown_output += (
-                        f"{metadata_markdown}\n_**{role_with_emoji}**_:\n{text}\n"
+                        f"{metadata_markdown}\n## {role_with_emoji}\n\n{text}\n"
                     )
-                    continue
                 elif metadata_markdown:
                     markdown_output += HORIZONTAL_LINE
-                    markdown_output += f"{metadata_markdown}\n_**{role_with_emoji}**_\n"
-                    continue
-
-            if text:
-                markdown_output += HORIZONTAL_LINE
-                markdown_output += f"_**{role_with_emoji}**_:\n{text}\n"
+                    markdown_output += f"{metadata_markdown}\n## {role_with_emoji}\n"
+            else:
+                if text:
+                    markdown_output += HORIZONTAL_LINE
+                    markdown_output += f"## {role_with_emoji}:\n\n{text}\n"
 
     return f"{markdown_output}\n"
 

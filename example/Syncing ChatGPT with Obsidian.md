@@ -15,16 +15,18 @@ _([[2023-09-03]] 05:11:58)_
 > }
 > ```
 
-_**⚙️ system**_
+## ⚙️ system
 
 ---
 
-_**👤 user**_:
+## 👤 user:
+
 I want to synchronize the history of my chats here with my obsidian notebook. How would you recommend I do that?
 
 ---
 
-_**🤖 assistant**_:
+## 🤖 assistant:
+
 Synchronizing your ChatGPT history with your Obsidian notebook is a great idea for keeping everything organized. There are a few approaches you can take, depending on your technical skillset, available tools, and specific needs:
 
 ### Manual Export and Import
@@ -71,12 +73,14 @@ In your case, given your jack-of-all-trades skillset, I'd recommend the Script-B
 
 ---
 
-_**👤 user**_:
+## 👤 user:
+
 Yes, please.
 
 ---
 
-_**🤖 assistant**_:
+## 🤖 assistant:
+
 Excellent. Given your skill set and the need for a robust, automated solution, let's dive into the Script-Based Automation approach. Here's a step-by-step guide to get you started:
 
 ### Step 1: Export ChatGPT History
@@ -122,12 +126,14 @@ This should give you a robust, automated way to synchronize your chat history wi
 
 ---
 
-_**👤 user**_:
+## 👤 user:
+
 Yes, please.
 
 ---
 
-_**🤖 assistant**_:
+## 🤖 assistant:
+
 Certainly, let's break this down into code snippets for each step. I'll use Python as the programming language for this example, and I'll assume that your exported chat history is in JSON format.
 
 ### Step 1: Export ChatGPT History
